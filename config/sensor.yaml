@@ -1,0 +1,13 @@
+### SERVER #############################################
+
+  - platform: synologydsm
+    host: !secret synology_host
+    username: !secret synology_user
+    password: !secret synology_pass
+    monitored_conditions:
+      - cpu_total_load
+      - memory_real_usage
+      - network_up
+      - network_down
+      - disk_temp
+      - volume_percentage_used

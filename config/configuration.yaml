@@ -1,0 +1,131 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+homeassistant:
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude_sec
+  longitude: !secret longitude_sec
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret elevation_sec
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/New_York
+  # Whitelist External Directories - List of folders that can be used as sources for sending files.
+  whitelist_external_dirs:
+    - /uploads
+
+automation: !include automations.yaml
+group: !include groups.yaml
+script: !include scripts.yaml
+sensor: !include sensor.yaml
+switch: !include switch.yaml
+
+###SYSTEM######################################################################
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+#Theme Setup
+frontend:
+  # Add themes
+  themes: !include themes.yaml
+  # Enable ES6 features
+  javascript_version: latest
+
+#Folder Watcher Setup
+folder_watcher:
+  - folder: /uploads/MKV
+    patterns:
+      - '*.mkv'
+  - folder: /uploads/TV_Seasons
+    patterns:
+      - '*.mkv'
+
+# Community Store
+hacs:
+  token: !secret hacs_token
+  theme: true
+  python_script: true
+
+# Enables support for tracking state changes over time
+history:
+
+#Configure Logging Settings
+logger:
+  default: error
+  #logs:
+    # custom_components.circadian_lighting: debug
+    # custom_components.circadian_lighting.sensor: debug
+    # custom_components.circadian_lighting.switch: debug
+
+#mqtt broker setup (designates mqtt broker with which HA communicates)
+mqtt:
+  broker: !secret mqtt_host
+
+#mqtt eventstream setup  (connects two Home Assistant instances via MQTT)
+mqtt_eventstream:
+  publish_topic: master/topic
+  subscribe_topic: slaves/#
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+# Pass HomeKit only devices into Home Assistant
+zeroconf:
+
+###USER ADDONS#################################################################
+
+circadian_lighting:
+  interval: 600
+  max_colortemp: 10000
+  min_colortemp: 1000
+  sunset_offset: 00:00:00
+  transition: 60
+
+calendar:
+  - platform: todoist
+    token: !secret todoist_token
+
+fastdotcom:
+  scan_interval:
+      minutes: 30
+
+homekit:
+  filter:
+    exclude_domains:
+      - light
+      - device_tracker
+
+notify:
+# Adding support for Discord notifications via The Best Server (Channel ID: saved in secrets)
+  - platform: discord
+    token: !secret discord_token
+    name: discord
+
+owntracks:
+  max_gps_accuracy: 200
+  waypoints: true
+  mqtt_topic: "owntracks/#"
+  events_only: true
+
+speedtestdotnet:
+  scan_interval:
+    minutes: 30
+  monitored_conditions:
+    - ping
+    - download
+    - upload
+
+weather:
+  - platform: darksky
+    api_key: !secret darksky_pass
+    latitude: !secret latitude_sec
+    longitude: !secret longitude_sec
+
+zone:
+  - name: 'Living_Room_iBeacon'
+    latitude: !secret latitude_sec
+    longitude: !secret longitude_sec
+    radius: 20
+    icon: mdi:home

@@ -1,0 +1,19 @@
+- platform: circadian_lighting
+  lights_ct:
+    - light.sink_light_left
+    - light.sink_light_right
+    - light.kitchen_candle_right
+    - light.kitchen_candle_left
+    - light.kitchen_downlight_1
+    - light.kitchen_downlight_2
+    - light.kitchen_downlight_3
+    - light.kitchen_downlight_4
+    - light.hall_light_1
+    - light.hall_light_2
+    - light.closet_light_1
+    - light.closet_light_2
+    - light.laura_bed_lamp
+    - light.samuel_bed_lamp
+    - light.desk_lights
+  min_brightness: 80
+  #test webhook notification
